@@ -131,31 +131,4 @@ class GraphGrid:
                 cell = row
                 last_row_cell = last_row
             else:
-                break;
-
-
-        '''
-        last_cell = self.north_east
-        last_row_cell = None
-
-        for row in range(self.rows):
-            row_start = last_cell
-            last_cell = None
-
-            for column in range(1, self.columns):
-                new_cell = Cell(row, column)
-
-                if last_row_cell:
-                    new_cell.north = last_row_cell
-                    last_row_cell.south = new_cell
-
-                if last_cell:
-                    new_cell.east = last_cell
-                    last_cell.west = last_cell
-
-                last_cell = new_cell
-                if last_row_cell and last_row_cell.west:
-                    last_row_cell = last_row_cell.west
-
-            last_row_cell = row_start
-        '''
+                break
