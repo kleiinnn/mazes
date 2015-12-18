@@ -1,4 +1,4 @@
-import svgwrite
+from grid_utils import to_ascii
 
 
 class Cell:
@@ -60,46 +60,14 @@ class Grid:
                 yield cell
 
     def __repr__(self):
-        output = '+' + ('---+' * self.columns) + '\n'
-
-        for row in self.each_rows():
-            top = '|'
-            bottom = '+'
-
-            for cell in row:
-                if not cell: cell = Cell(-1, -1)
-
-                top += '   ' + (' ' if cell.is_linked(cell.east) else '|')
-                bottom += ('   ' if cell.is_linked(cell.south) else '---') + '+'
-
-            output += top + '\n'
-            output += bottom + '\n'
-
-        return output
+        '''
+        Returns an ascii representation of this grid.
+        '''
+        return to_ascii(self)
 
     def each_rows(self):
         for row in self.__grid:
             yield row
-
-    def to_svg(self, cell_size=10):
-        dwg = svgwrite.Drawing(width=cell_size * self.columns,
-                               height=cell_size * self.rows)
-
-        for cell in self:
-            north_west = (cell.column * cell_size, cell.row * cell_size,)
-            south_east = ((cell.column + 1) * cell_size, (cell.row + 1) * cell_size,)
-
-            if not cell.north:
-                dwg.add(dwg.line(north_west, (south_east[0], north_west[1]), stroke='#000000'))
-            if not cell.west:
-                dwg.add(dwg.line(north_west, (north_west[0], south_east[1]), stroke='#000000'))
-
-            if not cell.is_linked(cell.east):
-                dwg.add(dwg.line((south_east[0], north_west[1]), south_east, stroke='#000000'))
-            if not cell.is_linked(cell.south):
-                dwg.add(dwg.line((north_west[0], south_east[1]), south_east, stroke='#000000'))
-
-        return dwg
 
     def _init_grid(self):
         return [[Cell(row, column) for column in range(0, self.columns)]
