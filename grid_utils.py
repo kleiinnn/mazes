@@ -1,5 +1,5 @@
 
-def to_ascii(grid):
+def to_ascii(grid, cell_body = None):
     output = '+' + ('---+' * grid.columns) + '\n'
 
     for row in grid.each_rows():
@@ -9,7 +9,9 @@ def to_ascii(grid):
         for cell in row:
             if not cell: cell = Cell(-1, -1)
 
-            top += '   ' + (' ' if cell.is_linked(cell.east) else '|')
+            body = cell_body(cell) if cell_body is not None else '   '
+
+            top += body + (' ' if cell.is_linked(cell.east) else '|')
             bottom += ('   ' if cell.is_linked(cell.south) else '---') + '+'
 
         output += top + '\n'
@@ -36,3 +38,7 @@ def to_svg(grid):
             dwg.add(dwg.line((north_west[0], south_east[1]), south_east, stroke='#000000'))
 
     return dwg
+
+def distance_cell_body(start):
+    distances = start.distances()
+    return lambda cell: '{:^3}'.format(distances[cell])

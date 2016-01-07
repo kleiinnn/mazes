@@ -1,4 +1,5 @@
 from grid_utils import to_ascii
+from distances import Distances
 
 
 class Cell:
@@ -6,23 +7,23 @@ class Cell:
         self.row = row
         self.column = column
 
-        self.__links = []
+        self.links = []
         self.north = None
         self.east = None
         self.south = None
         self.west = None
 
     def is_linked(self, cell):
-        return cell in self.__links
+        return cell in self.links
 
     def link(self, cell, bidi=True):
-        self.__links.append(cell)
+        self.links.append(cell)
 
         if bidi:
             cell.link(self, False)
 
     def unlink(self, cell, bidi=True):
-        self.__links.remove(cell)
+        self.links.remove(cell)
 
         if bidi: cell.unlink(self, False)
 
@@ -33,6 +34,25 @@ class Cell:
         if self.east: neighbors.append(self.east)
         if self.south: neighbors.append(self.south)
         if self.west: neighbors.append(self.west)
+
+    def distances(self):
+        distances = Distances(self)
+        frontier = [self]
+
+        while frontier:
+            new_frontier = []
+
+            for cell in frontier:
+                for linked in cell.links:
+                    if linked in distances:
+                        continue
+
+                    distances[linked] = distances[cell] + 1
+                    new_frontier.append(linked)
+
+            frontier = new_frontier
+
+        return distances
 
 
 class Grid:
