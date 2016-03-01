@@ -39,6 +39,11 @@ def to_svg(grid):
 
     return dwg
 
-def distance_cell_body(start):
-    distances = start.distances()
-    return lambda cell: '{:^3}'.format(distances[cell])
+def distance_cell_body(distances):
+    def format_body(cell):
+        if distances[cell] is None:
+            return '   '
+        else:
+            return '{:^3}'.format(distances[cell])
+
+    return format_body
