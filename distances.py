@@ -25,3 +25,15 @@ class Distances:
 
 
         return steps
+
+    def max(self):
+        max_distance = 0
+        max_dist_cell = self.root
+
+        for cell, distance in self.cells.items():
+            if distance > max_distance:
+                max_dist_cell = cell
+                max_distance = distance
+
+
+        return (max_dist_cell, max_distance)
