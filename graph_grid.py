@@ -1,4 +1,4 @@
-from grid import Cell
+from grid import Cell, AbstractGrid
 from grid_utils import to_ascii
 
 class RowWrapper:
@@ -41,7 +41,7 @@ class RowWrapper:
         return cells
 
 
-class GraphGrid:
+class GraphGrid(AbstractGrid):
     def __init__(self, rows, columns):
         self.rows = rows
         self.columns = columns
