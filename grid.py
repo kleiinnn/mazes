@@ -82,6 +82,8 @@ class AbstractGrid(metaclass=abc.ABCMeta):
 
         return output
 
+    def to_colored_svg(self, color_function):
+
     def to_svg(self):
         dwg = svgwrite.Drawing(width=cell_size * self.columns,
                                height=cell_size * self.rows)
@@ -101,15 +103,6 @@ class AbstractGrid(metaclass=abc.ABCMeta):
                 dwg.add(dwg.line((north_west[0], south_east[1]), south_east, stroke='#000000'))
 
         return dwg
-
-    def distance_cell_body(self, distances):
-        def format_body(cell):
-            if distances[cell] is None:
-                return '   '
-            else:
-                return '{:^3}'.format(distances[cell])
-
-        return format_body
 
 
 class Grid(AbstractGrid):
