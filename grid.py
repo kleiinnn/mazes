@@ -1,7 +1,6 @@
 import abc
-
-from grid_utils import to_ascii
 from distances import Distances
+import svgwrite
 
 
 class Cell:
@@ -82,11 +81,30 @@ class AbstractGrid(metaclass=abc.ABCMeta):
 
         return output
 
-    def to_colored_svg(self, color_function):
-
-    def to_svg(self):
+    def to_colored_svg(self, cell_size, color_function, with_borders=False):
         dwg = svgwrite.Drawing(width=cell_size * self.columns,
                                height=cell_size * self.rows)
+
+        for cell in self:
+            north_west = (cell.column * cell_size, cell.row * cell_size,)
+            south_east = ((cell.column + 1) * cell_size, (cell.row + 1) * cell_size,)
+
+            dwg.add(dwg.rect(
+                insert=north_west,
+                size=(cell_size, cell_size),
+                fill=color_function(cell)
+            ))
+
+        if with_borders:
+            self.to_svg(cell_size, drawing=dwg)
+
+        return dwg
+
+    def to_svg(self, cell_size, drawing=None):
+        dwg = drawing
+        if dwg is None:
+            dwg = svgwrite.Drawing(width=cell_size * self.columns,
+                                   height=cell_size * self.rows)
 
         for cell in self:
             north_west = (cell.column * cell_size, cell.row * cell_size,)

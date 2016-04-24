@@ -1,5 +1,5 @@
 from grid import Cell, AbstractGrid
-from grid_utils import to_ascii
+
 
 class RowWrapper:
     def __init__(self, start_cell, grid):

@@ -35,5 +35,12 @@ class Distances:
                 max_dist_cell = cell
                 max_distance = distance
 
-
         return (max_dist_cell, max_distance)
+
+    def cell_color(self, cell):
+        factor = self.max()[1] - self.cells[cell]
+        red = int(255 * factor / self.max()[1])
+        green = int(255 * factor / self.max()[1])
+        blue = 128 + int(127 * factor / self.max()[1])
+
+        return '#{:02X}{:02X}{:02X}'.format(red, green, blue)
