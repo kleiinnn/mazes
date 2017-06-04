@@ -1,8 +1,7 @@
 from sidewinder import sidewinder
 from grid import Grid
+from graph_grid import GraphGrid
 
-grid = Grid(10, 10)
+grid = GraphGrid(10, 10)
 sidewinder(grid)
 print(grid)
-
-grid.to_svg(100).write(open('maze.svg', 'w', encoding='utf-8'))
