@@ -41,6 +41,10 @@ class Grid
         @grid.sample.sample
     end
 
+    def size
+        @rows * @columns
+    end
+
     def each_row
         @grid.each do |row|
             yield row
@@ -85,7 +89,7 @@ class Grid
         output
     end
 
-    def background_color_for
+    def background_color_for(cell)
         nil
     end
 
