@@ -5,11 +5,16 @@ require 'cell'
 class Grid
     attr_reader :rows, :columns
 
-    def initialize(rows, columns)
-        @rows, @columns = rows, columns
+    def initialize(rows, columns = nil)
+        if columns
+            @rows, @columns = rows, columns
 
-        @grid = prepare_grid
-        configure_cells
+            @grid = prepare_grid
+            configure_cells
+        else
+            @rows, @columns = rows.size, rows.first.size
+            @grid = rows
+        end
     end
 
     def prepare_grid
@@ -31,7 +36,8 @@ class Grid
         end
     end
 
-    def [](row, column)
+    def [](row, column = nil)
+        return @grid[row] unless column
         return nil unless row.between?(0, @rows - 1)
         return nil unless column.between?(0, @grid[row].count - 1)
         @grid[row][column]
@@ -122,5 +128,56 @@ class Grid
         end
 
         img
+    end
+
+    def self.merge_vertical(*grids)
+        rows = grids.first.rows
+        merged = Array.new(rows, [])
+        grids.each do |grid|
+            i = 0
+            length = merged[0].size
+
+            grid.each_row do |row|
+                unless merged[i].empty?
+                    old_eastern_end = merged[i].last
+                    new_eastern_end = row.first
+                    old_eastern_end.east = new_eastern_end
+                    new_eastern_end.west = old_eastern_end
+                end
+
+                merged[i] += row
+                i += 1
+            end
+
+            link_row = merged[rand(rows)]
+            link_row[length-1].link(link_row[length])
+        end
+
+        Grid.new(merged)
+    end
+
+    def self.merge_horizontal(*grids)
+        merged = []
+        puts merged
+        grids.each do |grid|
+            grid.each_row do |row|
+                new_row = row.clone
+                last_row = merged.last
+
+                if last_row
+                    last_row.zip(new_row).each do |pair|
+                        pair[0].south = pair[1]
+                        pair[1].north = pair[0]
+                    end
+
+                    index = rand(last_row.size)
+                    last_row[index].link(new_row[index])
+                end
+
+                merged << new_row
+            end
+        end
+
+        Grid.new(merged)
     end
 end
