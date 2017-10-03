@@ -1,7 +1,7 @@
 class Wilsons
     def self.on(grid)
         unvisited = []
-        grid.each_cell { |cell| unvisited << cell}
+        grid.each_cell { |cell| unvisited << cell }
 
         first = unvisited.sample
         unvisited.delete(first)
